@@ -12,6 +12,20 @@ spl_autoload_register(function ($class_name) {
 
 echo Header::getHeader();
 echo Menu::getMenu();
-
-echo Game::getGameList();
+echo "<section id='content'>";
+$gameList = Game::getGameList();
+echo "<table><tr><th>Namn<th>Tag<th>Land";
+foreach ($gameList as $row) {
+  echo "<tr>
+          <td>
+            <a href=\"game.php?gameID={$row['gameID']}\">
+              {$row['fullName']}
+            </a>
+          </td>
+        </tr>";
+}
+echo "</table>";
 ?>
+</section>
+</body>
+</html>
