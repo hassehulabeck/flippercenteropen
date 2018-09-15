@@ -20,15 +20,21 @@ if (isset($_POST['submitPlayer'])) {
 
 
 ?>
+<?php
+  echo Header::getHeader();
+  echo Menu::getMenu();
+?>
 <h1>Lista över spelare</h1>
 <?php
 $lista = Player::playerList();
 echo "<table><tr><th>Namn<th>Tag<th>Land";
 foreach ($lista as $row) {
   echo "<tr>
-          <a href=\"player.php?playerID={$row['playerID']}\">
-            <td>{$row['fullName']}</td>
-          </a>
+          <td>
+            <a href=\"player.php?playerID={$row['playerID']}\">
+              {$row['fullName']}
+            </a>
+          </td>
           <td>{$row['tag']}</td>
           <td>{$row['country']}</td>
         </tr>";
@@ -40,3 +46,5 @@ echo "</table>";
 $player = new Player();
 echo $player->getPlayerForm();
 ?>
+</body>
+</html>

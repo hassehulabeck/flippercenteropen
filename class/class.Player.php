@@ -24,6 +24,7 @@ class Player {
       VALUES
       (:fName, :lName, :tag,
       :country, :ifpaID)
+      ON DUPLICATE KEY UPDATE country = :country
       ");
     $stmt->bindParam(":fName", $this->firstName);
     $stmt->bindParam(":lName", $this->lastName);
@@ -46,8 +47,8 @@ class Player {
     $stmt = $dbh->prepare("
       SELECT
         playerID,
-        CONCAT(lastName, \", \", firstName) AS fullName,
-        tag,
+        CONCAT(UPPER(lastName), \", \", firstName) AS fullName,
+        UPPER(tag) AS tag,
         country,
         ifpaID
       FROM
@@ -66,7 +67,12 @@ class Player {
     foreach ($this as $key=>$v) {
       if ($key != 'playerID') {
         $returstring .= "<br /><label for='$key'>$key</label>";
-        $returstring .= "<input type='text' name='$key' value=''/>";
+        if ($key == 'country') {
+          $returstring .= Country::getDropdown();
+        }
+        else {
+          $returstring .= "<input type='text' name='$key' value=''/>";
+        }
       }
     }
     $returstring .= "<p><input type='submit' value='Lägg in spelare' name='submitPlayer' /></form>";

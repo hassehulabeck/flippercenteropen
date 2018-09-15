@@ -2,7 +2,7 @@
 class Db {
 
   public function connect() {
-    include_once "db.php";
+    include "db.php";
     try {
       $dbh = new PDO($connectString, $user, $pw);
     }
