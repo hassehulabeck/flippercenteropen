@@ -14,8 +14,8 @@ class Game {
     $database = new Db();
     $dbh = $database->connect();
     $stmt = $dbh->prepare("
-      SELECT
-      FROM game
+      SELECT *
+      FROM games
       WHERE gameID = :gid
       ");
     $stmt->bindParam(":gid", $id);
@@ -32,10 +32,10 @@ class Game {
     $database = new Db();
     $dbh = $database->connect();
     $stmt = $dbh->prepare("
-      SELECT
-      FROM game
+      SELECT *
+      FROM games
       WHERE 1
-      ORDER BY abbr ASC
+      ORDER BY abbreviation ASC
       ");
     $stmt->bindParam(":gid", $id);
     if ($stmt->execute()){
@@ -46,5 +46,26 @@ class Game {
     }
     return $result;
   }
+
+  public function getEntriesByGame($gid) {
+    $database = new Db();
+    $dbh = $database->connect();
+    $stmt = $dbh->prepare("
+      SELECT entries.*, CONCAT(UPPER(players.lastName), \" \", players.firstName) AS fullName
+      FROM entries
+      JOIN players ON players.playerID = entries.playerID
+      WHERE entries.gameID = :gid
+      ORDER BY entries.qualificationPoints DESC
+      ");
+      $stmt->bindParam(":gid", $gid);
+      if ($stmt->execute()) {
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      }
+      else {
+        $result = $stmt->errorInfo();
+      }
+      return $result;
+  }
+
 }
 ?>

@@ -10,21 +10,51 @@ spl_autoload_register(function ($class_name) {
     include 'class/class.' . $class_name . '.php';
 });
 
+
+
 echo Header::getHeader();
 echo Menu::getMenu();
 echo "<section id='content'>";
-$gameList = Game::getGameList();
-echo "<table><tr><th>Namn<th>Tag<th>Land";
-foreach ($gameList as $row) {
-  echo "<tr>
-          <td>
-            <a href=\"game.php?gameID={$row['gameID']}\">
-              {$row['fullName']}
-            </a>
-          </td>
-        </tr>";
+if (isset($_GET['gameID'])) {
+  $gid = $_GET['gameID'];
+
+  // Get entries by game
+  $game = new Game;
+  $entryList = $game->getEntriesByGame($gid);
+
+  // Get name of the game
+  $gameName = $game->getGame($gid);
+  echo "<h1>{$gameName[0]['fullName']}</h1>";
+
+  echo "<table><tr><th>Player<th>Score<th>Qual.pts";
+  foreach ($entryList as $row) {
+    $score = number_format($row['score'], 0, ',', ' ');
+    echo "<tr>
+            <td>
+              <a href=\"player.php?playerID={$row['playerID']}\">
+                {$row['fullName']}
+              </a>
+            </td>
+            <td>$score</td>
+            <td>{$row['qualificationPoints']}</td>
+          </tr>";
+  }
+  echo "</table>";
 }
-echo "</table>";
+else {
+  $gameList = Game::getGameList();
+  echo "<table><tr><th>Namn";
+  foreach ($gameList as $row) {
+    echo "<tr>
+            <td>
+              <a href=\"game.php?gameID={$row['gameID']}\">
+                {$row['fullName']}
+              </a>
+            </td>
+          </tr>";
+  }
+  echo "</table>";
+}
 ?>
 </section>
 </body>

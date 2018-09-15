@@ -9,6 +9,24 @@ class Player {
   private $country;
   private $ifpaID;
 
+  public function getPlayer($pid) {
+    $database = new Db();
+    $dbh = $database->connect();
+    $stmt = $dbh->prepare("
+      SELECT *, CONCAT(UPPER(lastName, \" \", firstName)) AS fullName
+      FROM players
+      WHERE playerID = :pid
+      ");
+    $stmt->bindParam(":pid", $pid);
+    if ($stmt->execute()){
+      $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    else {
+      $result = $stmt->errorInfo();
+    }
+    return $result;
+  }
+
   public function setter(array $playerData) {
     $this->firstName = $playerData['firstName'];
     $this->lastName = $playerData['lastName'];
@@ -47,7 +65,7 @@ class Player {
     $stmt = $dbh->prepare("
       SELECT
         playerID,
-        CONCAT(UPPER(lastName), \", \", firstName) AS fullName,
+        CONCAT(UPPER(lastName), \" \", firstName) AS fullName,
         UPPER(tag) AS tag,
         country,
         ifpaID
@@ -79,6 +97,26 @@ class Player {
     return $returstring;
   }
 
+  public function getEntriesByPlayer($pid) {
+    $database = new Db();
+    $dbh = $database->connect();
+    $stmt = $dbh->prepare("
+      SELECT entries.*, games.abbreviation
+      FROM entries
+      JOIN games ON games.gameID = entries.gameID
+      WHERE entries.playerID = :pid
+      ORDER BY games.abbreviation ASC
+      ");
+      $stmt->bindParam(":pid", $pid);
+      if ($stmt->execute()) {
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      }
+      else {
+        $result = $stmt->errorInfo();
+      }
+      return $result;
+
+  }
 }
 
 ?>
