@@ -26,6 +26,13 @@ section {
   font-family: arial;
   color: brown;
 }
+#content label {
+  display: block;
+  margin-top: 1em;
+}
+#content input[type='submit'] {
+  margin-bottom: 2em;
+}
 table td.siffror {
   text-align: right;
 }

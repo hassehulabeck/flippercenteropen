@@ -20,6 +20,8 @@ if (isset($_POST['submitPlayer'])) {
 
 if (isset($_POST['submitEntry'])) {
   var_dump($_POST);
+  $entry = new Entry;
+  var_dump($entry->setupValues($_POST));
 }
 
 ?>
@@ -27,6 +29,7 @@ if (isset($_POST['submitEntry'])) {
   echo Header::getHeader();
   echo Menu::getMenu();
 ?>
+<section id='content'>
 <h1>Lista över spelare</h1>
 <?php
 $lista = Player::playerList();
@@ -50,9 +53,10 @@ $player = new Player();
 echo $player->getPlayerForm();
 
 // Skriv in resultat för en spelare
+echo "<h1>Registrera entry</h1>";
 $entryString = "<form action='index.php' method='POST'>";
 $allaSpelare = Player::playerList();
-$entryString = "<select name='player'>";
+$entryString .= "<select name='player'>";
 foreach ($allaSpelare as $row) {
   $entryString .= "
   <option value='{$row['playerID']}'>
@@ -73,12 +77,14 @@ foreach ($allaSpel as $row) {
       type='number'
       value=''
       id='{$row['gameID']}'
-      name='{$row['gameID']}'>
+      name='g{$row['gameID']}'>
   ";
 }
-$entryString .= "<input type='submit' name='submitEntry'>";
+$entryString .= "<input type='submit' name='submitEntry' value='Registrera resultat'>";
 $entryString .= "</form>";
+echo $entryString
 
 ?>
+</section>
 </body>
 </html>
