@@ -25,16 +25,18 @@ if (isset($_GET['gameID'])) {
   $gameName = $game->getGame($gid);
   echo "<h1>{$gameName[0]['fullName']}</h1>";
 
-  echo "<table><tr><th>Player<th>Score<th>Qual.pts";
+  echo "<table><tr><th>Player<th>Försök 1<th>Försök 2<th>Qual.pts";
   foreach ($entryList as $row) {
-    $score = number_format($row['score'], 0, ',', ' ');
+    $try1 = number_format($row['try1'], 0, ',', ' ');
+    $try2 = number_format($row['try2'], 0, ',', ' ');
     echo "<tr>
             <td>
               <a href=\"player.php?playerID={$row['playerID']}\">
                 {$row['fullName']}
               </a>
             </td>
-            <td class='siffror'>$score</td>
+            <td class='siffror'>$try1</td>
+            <td class='siffror'>$try2</td>
             <td class='siffror'>{$row['qualificationPoints']}</td>
           </tr>";
   }

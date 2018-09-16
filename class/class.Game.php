@@ -50,7 +50,7 @@ class Game {
     $database = new Db();
     $dbh = $database->connect();
     $stmt = $dbh->prepare("
-      SELECT *, MAX(score) AS maxScore, ROUND(AVG(score),0) AS avgScore
+      SELECT *, GREATEST(try1, try2) AS maxScore, ROUND(AVG(try1 + try2),0) AS avgScore
       FROM games
       JOIN entries ON entries.gameID = games.gameID
       WHERE 1
