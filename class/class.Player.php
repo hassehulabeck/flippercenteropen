@@ -13,13 +13,13 @@ class Player {
     $database = new Db();
     $dbh = $database->connect();
     $stmt = $dbh->prepare("
-      SELECT *, CONCAT(UPPER(lastName, \" \", firstName)) AS fullName
+      SELECT *, CONCAT(UPPER(lastName), \" \", firstName) AS fullName
       FROM players
       WHERE playerID = :pid
       ");
     $stmt->bindParam(":pid", $pid);
     if ($stmt->execute()){
-      $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      $result = $stmt->fetch(PDO::FETCH_ASSOC);
     }
     else {
       $result = $stmt->errorInfo();

@@ -21,7 +21,7 @@ if (isset($_GET['playerID'])) {
 
   // Get name of the player
   $playerName = $player->getPlayer($pid);
-  echo "<h1>{$playerName[0]['fullName']}</h1>";
+  echo "<h1>{$playerName['fullName']}</h1>";
 
   echo "<table><tr><th>Game<th>Score<th>Qual.pts";
   foreach ($entryList as $row) {
@@ -32,8 +32,8 @@ if (isset($_GET['playerID'])) {
                 {$row['abbreviation']}
               </a>
             </td>
-            <td>$score</td>
-            <td>{$row['qualificationPoints']}</td>
+            <td class='siffror'>$score</td>
+            <td class='siffror'>{$row['qualificationPoints']}</td>
           </tr>";
   }
   echo "</table>";

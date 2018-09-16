@@ -18,6 +18,9 @@ if (isset($_POST['submitPlayer'])) {
 
 }
 
+if (isset($_POST['submitEntry'])) {
+  var_dump($_POST);
+}
 
 ?>
 <?php
@@ -45,6 +48,37 @@ echo "</table>";
 <?php
 $player = new Player();
 echo $player->getPlayerForm();
+
+// Skriv in resultat för en spelare
+$entryString = "<form action='index.php' method='POST'>";
+$allaSpelare = Player::playerList();
+$entryString = "<select name='player'>";
+foreach ($allaSpelare as $row) {
+  $entryString .= "
+  <option value='{$row['playerID']}'>
+    {$row['fullName']}
+  </option>";
+}
+$entryString .= "</select>";
+
+// Hämta inputfält för alla spel.
+$allaSpel = Game::getGameInput();
+foreach ($allaSpel as $row) {
+  $entryString .= "
+  <label for ='{$row['abbreviation']}'>
+    {$row['fullName']}
+  </label>";
+  $entryString .= "
+    <input
+      type='number'
+      value=''
+      id='{$row['gameID']}'
+      name='{$row['gameID']}'>
+  ";
+}
+$entryString .= "<input type='submit' name='submitEntry'>";
+$entryString .= "</form>";
+
 ?>
 </body>
 </html>

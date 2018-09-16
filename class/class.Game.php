@@ -10,6 +10,24 @@ class Game {
   private $ipdbID;
   private $playoffGame;
 
+  public static function getGameInput() {
+    $database = new Db();
+    $dbh = $database->connect();
+    $stmt = $dbh->prepare("
+      SELECT gameID, fullName, abbreviation
+      FROM games
+      WHERE 1
+      ORDER BY fullName ASC
+      ");
+    if ($stmt->execute()){
+      $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    else {
+      $result = $stmt->errorInfo();
+    }
+    return $result;
+  }
+
   public function getGame($id) {
     $database = new Db();
     $dbh = $database->connect();
@@ -32,9 +50,11 @@ class Game {
     $database = new Db();
     $dbh = $database->connect();
     $stmt = $dbh->prepare("
-      SELECT *
+      SELECT *, MAX(score) AS maxScore, ROUND(AVG(score),0) AS avgScore
       FROM games
+      JOIN entries ON entries.gameID = games.gameID
       WHERE 1
+      GROUP BY games.gameID
       ORDER BY abbreviation ASC
       ");
     $stmt->bindParam(":gid", $id);

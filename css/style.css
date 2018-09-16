@@ -26,3 +26,6 @@ section {
   font-family: arial;
   color: brown;
 }
+table td.siffror {
+  text-align: right;
+}

@@ -21,7 +21,6 @@ if (isset($_GET['gameID'])) {
   // Get entries by game
   $game = new Game;
   $entryList = $game->getEntriesByGame($gid);
-
   // Get name of the game
   $gameName = $game->getGame($gid);
   echo "<h1>{$gameName[0]['fullName']}</h1>";
@@ -35,15 +34,15 @@ if (isset($_GET['gameID'])) {
                 {$row['fullName']}
               </a>
             </td>
-            <td>$score</td>
-            <td>{$row['qualificationPoints']}</td>
+            <td class='siffror'>$score</td>
+            <td class='siffror'>{$row['qualificationPoints']}</td>
           </tr>";
   }
   echo "</table>";
 }
 else {
   $gameList = Game::getGameList();
-  echo "<table><tr><th>Namn";
+  echo "<table><tr><th>Namn<th>Bästa poäng<th>Medelpoäng";
   foreach ($gameList as $row) {
     echo "<tr>
             <td>
@@ -51,6 +50,8 @@ else {
                 {$row['fullName']}
               </a>
             </td>
+            <td class='siffror'>" . number_format($row['maxScore'], 0, ',', ' ') . "</td>
+            <td class='siffror'>" . number_format($row['avgScore'], 0, ',', ' ') . "</td>
           </tr>";
   }
   echo "</table>";
